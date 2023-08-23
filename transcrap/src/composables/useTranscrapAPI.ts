@@ -8,26 +8,20 @@ type TranslationParams = {
 };
 
 type TranslationResponse = {
-  translation: string
-}
+  translation: string;
+};
 export const useTranscrapAPI = () => {
   const axios = useAxios();
-  const isLoading = ref(false)
+  const isLoading = ref(false);
   const toggleLoading = () => {
-    isLoading.value = !isLoading.value
-  }
+    isLoading.value = !isLoading.value;
+  };
   const getTranslation = async (params: TranslationParams) => {
-    try {
-      toggleLoading()
-      const response = await axios.get<TranslationResponse>("/translate", { params });
-      return response.data;
-    } catch (error: any) {
-      if (error?.response) {
-        console.log(error.response);
-      }
-    } finally {
-      toggleLoading()
-    }
+    toggleLoading();
+    const response = await axios
+      .get<TranslationResponse>("/translate", { params })
+      .finally(() => toggleLoading());
+    return response.data;
   };
   return { isLoading, getTranslation };
 };
